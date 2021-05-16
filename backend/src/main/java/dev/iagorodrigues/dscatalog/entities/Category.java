@@ -1,5 +1,7 @@
 package dev.iagorodrigues.dscatalog.entities;
 
+import dev.iagorodrigues.dscatalog.dto.CategoryDTO;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,6 +27,10 @@ public class Category implements Serializable {
     public Category(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public Category(CategoryDTO categoryDTO) {
+        name = categoryDTO.getName();
     }
 
     public Long getId() {
