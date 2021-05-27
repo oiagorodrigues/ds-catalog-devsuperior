@@ -1,6 +1,10 @@
 package dev.iagorodrigues.dscatalog.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import dev.iagorodrigues.dscatalog.dto.CategoryDTO;
+import dev.iagorodrigues.dscatalog.services.CategoryService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,30 +12,26 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.ResponseEntity;
-
-import dev.iagorodrigues.dscatalog.services.CategoryService;
-import dev.iagorodrigues.dscatalog.dto.CategoryDTO;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryDTO>> getCategories() {
+    public ResponseEntity<List<CategoryDTO>> fetchCategories() {
         List<CategoryDTO> categories = categoryService.findAll();
         return ResponseEntity.ok().body(categories);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id) {
+    public ResponseEntity<CategoryDTO> findCategoryById(@PathVariable Long id) {
         CategoryDTO categoryDTO = categoryService.findById(id);
         return ResponseEntity.ok().body(categoryDTO);
     }
@@ -49,5 +49,11 @@ public class CategoryController {
     public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO) {
         CategoryDTO updatedCategoryDTO = categoryService.update(id, categoryDTO);
         return ResponseEntity.ok().body(updatedCategoryDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable Long id) {
+        categoryService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }

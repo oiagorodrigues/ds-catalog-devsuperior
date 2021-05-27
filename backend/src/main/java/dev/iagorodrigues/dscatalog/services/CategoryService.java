@@ -1,25 +1,26 @@
 package dev.iagorodrigues.dscatalog.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import dev.iagorodrigues.dscatalog.dto.CategoryDTO;
+import dev.iagorodrigues.dscatalog.entities.Category;
+import dev.iagorodrigues.dscatalog.exceptions.DatabaseException;
+import dev.iagorodrigues.dscatalog.exceptions.ResourceNotFoundException;
+import dev.iagorodrigues.dscatalog.repositories.CategoryRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import dev.iagorodrigues.dscatalog.dto.CategoryDTO;
-import dev.iagorodrigues.dscatalog.entities.Category;
-import dev.iagorodrigues.dscatalog.exceptions.ResourceNotFoundException;
-import dev.iagorodrigues.dscatalog.repositories.CategoryRepository;
-
 import javax.persistence.EntityNotFoundException;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 @Service
 public class CategoryService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
     public List<CategoryDTO> findAll() {
@@ -51,7 +52,18 @@ public class CategoryService {
             entity = categoryRepository.save(entity);
             return new CategoryDTO(entity);
         } catch (EntityNotFoundException exception) {
-            throw new ResourceNotFoundException("A categoria com " + id + " não existe.");
+            throw new ResourceNotFoundException("A categoria com id " + id + " não existe");
+        }
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        try {
+            categoryRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException("A categoria com id " + id + " não existe");
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Não é possível remover uma categoria com produtos associados");
         }
     }
 }

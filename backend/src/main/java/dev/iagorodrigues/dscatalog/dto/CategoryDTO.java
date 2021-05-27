@@ -1,42 +1,24 @@
 package dev.iagorodrigues.dscatalog.dto;
 
 import dev.iagorodrigues.dscatalog.entities.Category;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.io.Serializable;
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
+public class CategoryDTO {
 
-public class CategoryDTO implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+    @EqualsAndHashCode.Include
     private Long id;
     private String name;
-
-    public CategoryDTO() {
-    }
-
-    public CategoryDTO(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 
     public CategoryDTO(Category entity) {
         this.id = entity.getId();
         this.name = entity.getName();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
