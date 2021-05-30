@@ -2,7 +2,6 @@ package dev.iagorodrigues.dscatalog.dto;
 
 import dev.iagorodrigues.dscatalog.entities.Category;
 import dev.iagorodrigues.dscatalog.entities.Product;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,6 +35,7 @@ public class ProductDTO {
     public ProductDTO(Product entity) {
         id = entity.getId();
         name = entity.getName();
+        price = entity.getPrice();
         description = entity.getDescription();
         imgUrl = entity.getImgUrl();
         date = entity.getDate();
