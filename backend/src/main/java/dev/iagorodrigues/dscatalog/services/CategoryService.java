@@ -56,7 +56,7 @@ public class CategoryService {
         }
     }
 
-    @Transactional
+    // don't use @Transaction, so we can catch the DataIntegrityViolationException Exception
     public void delete(Long id) {
         try {
             categoryRepository.deleteById(id);
