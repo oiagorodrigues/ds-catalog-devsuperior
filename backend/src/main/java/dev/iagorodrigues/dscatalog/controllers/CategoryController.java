@@ -3,6 +3,8 @@ package dev.iagorodrigues.dscatalog.controllers;
 import dev.iagorodrigues.dscatalog.dto.CategoryDTO;
 import dev.iagorodrigues.dscatalog.services.CategoryService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -25,8 +26,8 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryDTO>> fetchCategories() {
-        List<CategoryDTO> categories = categoryService.findAll();
+    public ResponseEntity<Page<CategoryDTO>> fetchCategories(Pageable pageable) {
+        Page<CategoryDTO> categories = categoryService.findAll(pageable);
         return ResponseEntity.ok().body(categories);
     }
 
