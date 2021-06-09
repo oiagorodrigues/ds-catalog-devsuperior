@@ -2,6 +2,7 @@ package dev.iagorodrigues.dscatalog.entities;
 
 import dev.iagorodrigues.dscatalog.dto.CategoryDTO;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,11 @@ public class Category {
     @Setter(AccessLevel.NONE)
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant updatedAt;
+
+    public Category(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public Category(CategoryDTO categoryDTO) {
         name = categoryDTO.getName();
