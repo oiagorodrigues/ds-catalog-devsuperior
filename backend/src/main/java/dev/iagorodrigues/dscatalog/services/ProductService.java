@@ -4,10 +4,12 @@ import dev.iagorodrigues.dscatalog.dto.CategoryDTO;
 import dev.iagorodrigues.dscatalog.dto.ProductDTO;
 import dev.iagorodrigues.dscatalog.entities.Category;
 import dev.iagorodrigues.dscatalog.entities.Product;
+import dev.iagorodrigues.dscatalog.exceptions.DatabaseException;
 import dev.iagorodrigues.dscatalog.exceptions.ResourceNotFoundException;
 import dev.iagorodrigues.dscatalog.repositories.CategoryRepository;
 import dev.iagorodrigues.dscatalog.repositories.ProductRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,6 +65,8 @@ public class ProductService {
             productRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException("O produto com id " + id + " não existe");
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Não é possível remover um produto com categorias associadas");
         }
     }
 
