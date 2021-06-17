@@ -2,6 +2,9 @@ package dev.iagorodrigues.dscatalog.dto;
 
 import dev.iagorodrigues.dscatalog.entities.Category;
 import dev.iagorodrigues.dscatalog.entities.Product;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,15 +12,18 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Positive;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@NoArgsConstructor
-@Getter @Setter
-public class ProductDTO {
+@Data @NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class ProductDTO implements Serializable {
+    public static final long serialVersionUID = 1L;
 
+    @EqualsAndHashCode.Include
     private Long id;
 
     @NotBlank(message = "Campo nome é obrigatório")
@@ -34,15 +40,6 @@ public class ProductDTO {
     private Instant date;
 
     private final List<CategoryDTO> categories = new ArrayList<>();
-
-    public ProductDTO(Long id, String name, String description, Double price, String imgUrl, Instant date) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.imgUrl = imgUrl;
-        this.date = date;
-    }
 
     public ProductDTO(Product entity) {
         id = entity.getId();

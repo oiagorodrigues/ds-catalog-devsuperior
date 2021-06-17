@@ -10,14 +10,14 @@ import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Data @AllArgsConstructor @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class UserDTO {
+public class UserDTO implements Serializable {
+    public static final long serialVersionUID = 1L;
 
     @EqualsAndHashCode.Include
     private Long id;

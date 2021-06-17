@@ -2,8 +2,8 @@ package dev.iagorodrigues.dscatalog.entities;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -20,11 +20,9 @@ import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-@Table(name = "tb_user")
+@Entity @Table(name = "tb_user")
 public class User {
 
     @EqualsAndHashCode.Include

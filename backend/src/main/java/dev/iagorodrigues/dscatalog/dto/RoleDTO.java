@@ -6,11 +6,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+import java.io.Serializable;
+
+@Data @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class RoleDTO {
+public class RoleDTO implements Serializable {
+    public static final long serialVersionUID = 1L;
 
     @EqualsAndHashCode.Include
     private Long id;

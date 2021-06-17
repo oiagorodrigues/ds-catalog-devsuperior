@@ -2,9 +2,8 @@ package dev.iagorodrigues.dscatalog.entities;
 
 import dev.iagorodrigues.dscatalog.dto.CategoryDTO;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -17,17 +16,16 @@ import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+@Data @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@NoArgsConstructor
-@Getter
-@Setter
-@Entity
-@Table(name = "tb_category")
-public class Category {
+@Entity @Table(name = "tb_category")
+public class Category implements Serializable {
+    public static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
