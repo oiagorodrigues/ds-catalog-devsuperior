@@ -1,13 +1,14 @@
 package dev.iagorodrigues.dscatalog.dto;
 
+import dev.iagorodrigues.dscatalog.services.validation.UserInsertValid;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 
 @Getter @Setter
+@UserInsertValid
 public class UserInsertDTO extends UserDTO {
     public static final long serialVersionUID = 1L;
 
