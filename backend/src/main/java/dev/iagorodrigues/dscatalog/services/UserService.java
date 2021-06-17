@@ -3,6 +3,7 @@ package dev.iagorodrigues.dscatalog.services;
 import dev.iagorodrigues.dscatalog.dto.RoleDTO;
 import dev.iagorodrigues.dscatalog.dto.UserDTO;
 import dev.iagorodrigues.dscatalog.dto.UserInsertDTO;
+import dev.iagorodrigues.dscatalog.dto.UserUpdateDTO;
 import dev.iagorodrigues.dscatalog.entities.Role;
 import dev.iagorodrigues.dscatalog.entities.User;
 import dev.iagorodrigues.dscatalog.exceptions.DatabaseException;
@@ -53,10 +54,10 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO update(Long id, UserDTO userDTO) {
+    public UserDTO update(Long id, UserUpdateDTO dto) {
         try {
             User user = repository.getOne(id);
-            mapUserDtoToEntity(userDTO, user);
+            mapUserDtoToEntity(dto, user);
             user = repository.save(user);
             return new UserDTO(user);
         } catch (EntityNotFoundException exception) {

@@ -1,6 +1,6 @@
 package dev.iagorodrigues.dscatalog.dto;
 
-import dev.iagorodrigues.dscatalog.services.validation.UserInsertValid;
+import dev.iagorodrigues.dscatalog.services.validation.user.UserInsertValid;
 import lombok.Getter;
 import lombok.Setter;
 
