@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Getter @Setter
-public class UserInsertDTO extends UserDTO implements Serializable {
+public class UserInsertDTO extends UserDTO {
     public static final long serialVersionUID = 1L;
 
     @Size(min = 8, message = "Senha deve possuir, no mínimo, 8 caracteres")
