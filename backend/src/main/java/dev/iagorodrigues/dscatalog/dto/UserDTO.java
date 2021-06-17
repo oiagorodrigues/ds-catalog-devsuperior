@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,8 +21,12 @@ public class UserDTO {
 
     @EqualsAndHashCode.Include
     private Long id;
+
+    @NotBlank(message = "Campo nome é obrigatório")
     private String firstName;
     private String lastName;
+
+    @Email(message = "Email inválido")
     private String email;
 
     @Setter(AccessLevel.NONE)

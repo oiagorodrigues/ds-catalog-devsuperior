@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +19,20 @@ import java.util.Set;
 public class ProductDTO {
 
     private Long id;
+
+    @NotBlank(message = "Campo nome é obrigatório")
     private String name;
+
     private String description;
+
+    @Positive(message = "Preço deve ser um valor positivo")
     private Double price;
+
     private String imgUrl;
+
+    @PastOrPresent(message = "A data no produto não pode ser futura")
     private Instant date;
+
     private final List<CategoryDTO> categories = new ArrayList<>();
 
     public ProductDTO(Long id, String name, String description, Double price, String imgUrl, Instant date) {
