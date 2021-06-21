@@ -5,9 +5,8 @@ import dev.iagorodrigues.dscatalog.entities.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
@@ -34,9 +33,10 @@ public class ProductDTO implements Serializable {
     @Positive(message = "Preço deve ser um valor positivo")
     private Double price;
 
+    @URL(message = "A URL da imagem deve ser uma URL válida")
     private String imgUrl;
 
-    @PastOrPresent(message = "A data no produto não pode ser futura")
+    @PastOrPresent(message = "A data do produto não pode ser futura")
     private Instant date;
 
     private final List<CategoryDTO> categories = new ArrayList<>();
