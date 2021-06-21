@@ -11,10 +11,15 @@ import dev.iagorodrigues.dscatalog.exceptions.ResourceNotFoundException;
 import dev.iagorodrigues.dscatalog.repositories.RoleRepository;
 import dev.iagorodrigues.dscatalog.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +29,9 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
+
+    private static Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository repository;
     private final RoleRepository roleRepository;
@@ -85,5 +92,14 @@ public class UserService {
             Role role = roleRepository.getOne(roleDTO.getId());
             user.getRoles().add(role);
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return repository.findByEmail(username)
+                .orElseThrow(() -> {
+                    logger.error("User not found: " + username);
+                    throw new UsernameNotFoundException("Email not found");
+                });
     }
 }
