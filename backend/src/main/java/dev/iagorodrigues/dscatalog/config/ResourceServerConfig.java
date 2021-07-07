@@ -18,12 +18,12 @@ import java.util.Arrays;
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-    @Autowired private JwtTokenStore tokenStore;
-    @Autowired private Environment env;
-
     private static final String[] PUBLIC_ROUTES = { "/oauth/token", "/h2-console/**" };
     private static final String[] PRIVATE_ROUTES = { "/products/**", "/categories/**" };
     private static final String[] ADMIN_ROUTES = { "/users/**" };
+
+    @Autowired private JwtTokenStore tokenStore;
+    @Autowired private Environment env;
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
