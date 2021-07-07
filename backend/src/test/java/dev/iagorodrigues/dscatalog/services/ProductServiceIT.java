@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @Transactional
-public class ProductServiceIntegrationTests {
+public class ProductServiceIT {
 
     @Autowired
     private ProductService service;
@@ -52,10 +52,10 @@ public class ProductServiceIntegrationTests {
     }
 
     @Test
-    public void findAllShouldReturnPageWithPageWhenPage0Size10TotalElements25() {
+    public void fetchProductsShouldReturnPageWithProductsWhenPage0Size10TotalElements25() {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
-        Page<ProductDTO> result = service.findAll(pageRequest);
+        Page<ProductDTO> result = service.fetchProducts(0L, "", pageRequest);
 
         assertFalse(result.isEmpty());
         assertEquals(pageNumber, result.getNumber());
@@ -64,19 +64,41 @@ public class ProductServiceIntegrationTests {
     }
 
     @Test
-    public void findAllShouldReturnEmptyPageWhenPageDoesNotExists() {
+    public void fetchProductsShouldReturnPageFilteredByProducts() {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+
+        Page<ProductDTO> result = service.fetchProducts(2L, "", pageRequest);
+
+        assertFalse(result.isEmpty());
+        assertEquals(pageNumber, result.getNumber());
+        assertEquals(pageSize, result.getSize());
+        assertEquals(2, result.getTotalElements());
+    }
+
+    @Test
+    public void fetchProductsShouldReturnPageFilteredByProductName() {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+
+        Page<ProductDTO> result = service.fetchProducts(0L, "Gamer", pageRequest);
+
+        assertFalse(result.isEmpty());
+        assertEquals(pageNumber, result.getNumber());
+        assertEquals(pageSize, result.getSize());
+        assertEquals(21, result.getTotalElements());
+    }
+
+    @Test
+    public void fetchProductsShouldReturnEmptyPageWhenPageDoesNotExists() {
         PageRequest pageRequest = PageRequest.of(50, pageSize);
-
-        Page<ProductDTO> result = service.findAll(pageRequest);
-
+        Page<ProductDTO> result = service.fetchProducts(0L, "", pageRequest);
         assertTrue(result.isEmpty());
     }
 
     @Test
-    public void findAllShouldReturnSortedPageWhenSortByName() {
+    public void fetchProductsShouldReturnSortedPageWhenSortByName() {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("name"));
 
-        Page<ProductDTO> result = service.findAll(pageRequest);
+        Page<ProductDTO> result = service.fetchProducts(0L, "", pageRequest);
 
         assertFalse(result.isEmpty());
         assertEquals("Macbook Pro", result.getContent().get(0).getName());

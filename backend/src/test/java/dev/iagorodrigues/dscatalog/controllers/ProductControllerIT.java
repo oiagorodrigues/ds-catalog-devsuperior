@@ -3,6 +3,7 @@ package dev.iagorodrigues.dscatalog.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.iagorodrigues.dscatalog.dto.ProductDTO;
 import dev.iagorodrigues.dscatalog.factories.ProductTestFactory;
+import dev.iagorodrigues.dscatalog.tests.TokenUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class ProductControllerIntegrationTests {
+public class ProductControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -31,26 +32,32 @@ public class ProductControllerIntegrationTests {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private TokenUtil tokenUtil;
+
     private Long existingId;
     private Long nonExistingId;
     private Long countTotalProducts;
     private String requestJsonBody;
     private ProductDTO productDTO;
+    private String username;
+    private String password;
 
     @BeforeEach
     void setUp() throws Exception {
+        username = "maria@gmail.com";
+        password = "123456";
         existingId = 1L;
         nonExistingId = 1000L;
         countTotalProducts = 25L;
         productDTO = ProductTestFactory.createProductDTO();
         requestJsonBody = objectMapper.writeValueAsString(productDTO);
-
     }
 
     @Test
     public void fetchProductsShouldReturnSortedPageWhenSortByName() throws Exception {
         ResultActions result =
-                mockMvc.perform(get("/api/products?page=0&size=12&sort=name,asc")
+                mockMvc.perform(get("/products?page=0&size=12&sort=name,asc")
                         .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isOk());
@@ -64,7 +71,7 @@ public class ProductControllerIntegrationTests {
     @Test
     public void findProductByIdShouldReturnProductDTOWhenIdExists() throws Exception {
         ResultActions result =
-                mockMvc.perform(get("/api/products/{id}", existingId)
+                mockMvc.perform(get("/products/{id}", existingId)
                         .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isOk());
@@ -76,7 +83,7 @@ public class ProductControllerIntegrationTests {
     @Test
     public void findProductByIdShouldReturnNotFoundWhenIdDoesNotExists() throws Exception {
         ResultActions result =
-                mockMvc.perform(get("/api/products/{id}", nonExistingId)
+                mockMvc.perform(get("/products/{id}", nonExistingId)
                         .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isNotFound());
@@ -84,8 +91,11 @@ public class ProductControllerIntegrationTests {
 
     @Test
     public void createProductByIdShouldReturnProductDTO() throws Exception {
+        String accessToken = tokenUtil.obtainAccessToken(mockMvc, username, password);
+
         ResultActions result =
-                mockMvc.perform(post("/api/products")
+                mockMvc.perform(post("/products")
+                        .header("Authorization", "Bearer " + accessToken)
                         .content(requestJsonBody)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON));
@@ -99,8 +109,11 @@ public class ProductControllerIntegrationTests {
 
     @Test
     public void updateShouldReturnProductDTOWhenIdExists() throws Exception {
+        String accessToken = tokenUtil.obtainAccessToken(mockMvc, username, password);
+
         ResultActions result =
-                mockMvc.perform(put("/api/products/{id}", existingId)
+                mockMvc.perform(put("/products/{id}", existingId)
+                        .header("Authorization", "Bearer " + accessToken)
                         .content(requestJsonBody)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON));
@@ -113,8 +126,11 @@ public class ProductControllerIntegrationTests {
 
     @Test
     public void updateShouldReturnNotFoundWhenIdDoesNotExists() throws Exception {
+        String accessToken = tokenUtil.obtainAccessToken(mockMvc, username, password);
+
         ResultActions result =
-                mockMvc.perform(put("/api/products/{id}", nonExistingId)
+                mockMvc.perform(put("/products/{id}", nonExistingId)
+                        .header("Authorization", "Bearer " + accessToken)
                         .content(requestJsonBody)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON));
@@ -124,8 +140,11 @@ public class ProductControllerIntegrationTests {
 
     @Test
     public void deleteShouldReturnNoContentWhenIdExists() throws Exception {
+        String accessToken = tokenUtil.obtainAccessToken(mockMvc, username, password);
+
         ResultActions result =
-                mockMvc.perform(delete("/api/products/{id}", existingId)
+                mockMvc.perform(delete("/products/{id}", existingId)
+                        .header("Authorization", "Bearer " + accessToken)
                         .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isNoContent());
@@ -133,8 +152,11 @@ public class ProductControllerIntegrationTests {
 
     @Test
     public void deleteShouldReturnNotFoundWhenIdDoesNotExists() throws Exception {
+        String accessToken = tokenUtil.obtainAccessToken(mockMvc, username, password);
+
         ResultActions result =
-                mockMvc.perform(delete("/api/products/{id}", nonExistingId)
+                mockMvc.perform(delete("/products/{id}", nonExistingId)
+                        .header("Authorization", "Bearer " + accessToken)
                         .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isNotFound());
